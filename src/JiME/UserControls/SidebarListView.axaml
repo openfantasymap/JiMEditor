@@ -1,0 +1,42 @@
+<UserControl x:Class="JiME.UserControls.SidebarListView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="using:JiME"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="400">
+
+	<UserControl.Resources>
+		<local:SettingsConverter x:Key="sc"/>
+	</UserControl.Resources>
+	<!--the custom WPF button template (rounded border, white border on hover, dark when pressed, faded when disabled)
+	    is the global Button style in Styles/JiMEStyles.axaml-->
+
+	<ScrollViewer VerticalScrollBarVisibility="Auto">
+		<StackPanel>
+			<TextBlock HorizontalAlignment="Center" FontWeight="Bold" Text="{Binding Title}"></TextBlock>
+			<ComboBox x:Name="dataListView" ItemsSource="{Binding ListData}" SelectedValueBinding="{Binding dataName}" Margin="3" DisplayMemberBinding="{Binding dataName}" SelectedIndex="0"/>
+			<StackPanel Orientation="Horizontal" Margin="5">
+
+				<StackPanel.Styles>
+					<Style Selector="Image">
+						<Setter Property="Width" Value="24"/>
+					</Style>
+				</StackPanel.Styles>
+
+
+				<Button x:Name="addInteraction" Click="AddInteraction_Click" Background="MediumSeaGreen">
+					<Image Source="/Assets/add.png" />
+				</Button>
+				<Button x:Name="removeInteraction" Margin="5,0,0,0" Click="RemoveInteraction_Click" Background="#ff4200" IsEnabled="{Binding ElementName=dataListView, Path=SelectedValue, Converter={StaticResource sc}}">
+					<Image Source="/Assets/remove.png"/>
+				</Button>
+				<Button x:Name="settings" Margin="5,0,0,0" Click="Settings_Click" Background="Silver" IsEnabled="{Binding ElementName=dataListView, Path=SelectedValue, Converter={StaticResource sc}}">
+					<Image Source="/Assets/settings.png" />
+				</Button>
+			</StackPanel>
+		</StackPanel>
+	</ScrollViewer>
+
+</UserControl>

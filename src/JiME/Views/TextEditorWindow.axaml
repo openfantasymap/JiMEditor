@@ -1,0 +1,94 @@
+<Window x:Class="JiME.Views.TextEditorWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:JiME"
+        mc:Ignorable="d"
+        Title="" Classes="DefaultWindow" Height="450" WindowStartupLocation="CenterScreen" CanResize="True" MinWidth="680" MaxHeight="800">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+			<!--<RowDefinition Height="auto"/>-->
+		</Grid.RowDefinitions>
+
+		<StackPanel x:Name="descriptionBlock" Margin="5" Orientation="Horizontal">
+			<TextBlock Classes="Heading" Text="Short Description:" />
+			<TextBox x:Name="shortnameTB" Text="{Binding shortName}" Margin="10,0" MinWidth="300" Height="24" HorizontalAlignment="Left" FontSize="16"/>
+		</StackPanel>
+
+		<TextBox Grid.Row="1" x:Name="pageText" AcceptsReturn="True" Background="{StaticResource bgColorLight}" Foreground="White" FontSize="14" TextWrapping="Wrap" Padding="5" Margin="5,5,5,0" BorderBrush="White" TextChanged="TextBox_TextChanged" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+		<!--page info-->
+		<!--<TextBlock x:Name="pageInfo" Grid.Row="2" Margin="10,0,10,0" Classes="SubText" Text="Info"/>
+
+		<TextBlock x:Name="charCount" Grid.Row="2" HorizontalAlignment="Right" Margin="10,0,10,0" Classes="SubText" Text="Characters"/>-->
+
+		<!--Footer-->
+		<Border Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="Silver" HorizontalAlignment="Stretch" Background="#FF46464A" Margin="0,10,0,0">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+				</Grid.ColumnDefinitions>
+
+				<WrapPanel>
+					<!--page controls - DEPRECATED-->
+					<!--<Button IsVisible="False" x:Name="addButton" Margin="10" Background="MediumSeaGreen" Click="AddButton_Click" >
+						<Image Source="/Assets/addpage.png" Stretch="Uniform" Width="32" Margin="5"/>
+					</Button>
+
+					<Button IsVisible="False" x:Name="removeButton" Margin="10" Background="#ff4200" Click="RemoveButton_Click" >
+						<Image Source="/Assets/removepage.png" Stretch="Uniform" Width="32" Margin="5"/>
+					</Button>
+
+					<Button IsVisible="False" x:Name="leftButton" Margin="10" Background="Moccasin" Click="LeftButton_Click" >
+						<Image Source="/Assets/left.png" Stretch="Uniform" Width="32" Margin="5"/>
+					</Button>
+					<Button IsVisible="False" x:Name="rightButton" Margin="10" Background="Moccasin" Click="RightButton_Click" >
+						<Image Source="/Assets/right.png" Stretch="Uniform" Width="32" Margin="5"/>
+					</Button>-->
+
+					<!--<TextBlock Text="Triggered By:" Classes="Heading" Margin="10,0">
+						<TextBlock.Foreground>
+							<SolidColorBrush Color="White" />
+						</TextBlock.Foreground>
+					</TextBlock>-->
+
+					<local:GroupBox x:Name="triggerGroup" Header="Triggered By:" Margin="10,10" Foreground="White">
+						<WrapPanel VerticalAlignment="Center">
+							<ComboBox x:Name="triggerLB" MinWidth="150" VerticalAlignment="Center" ItemsSource="{Binding scenario.triggersObserver}" SelectedValue="{Binding bookData.triggerName}" SelectedValueBinding="{Binding dataName}" DisplayMemberBinding="{Binding dataName}" Margin="5,0">
+							</ComboBox>
+
+							<Button x:Name="addTriggerButton" Background="MediumSeaGreen" Margin="5,0" Click="AddTriggerButton_Click">
+								<Image Source="/Assets/add.png" Width="16"/>
+							</Button>
+						</WrapPanel>
+					</local:GroupBox>
+
+					<StackPanel x:Name="resultbox" VerticalAlignment="Center">
+						<TextBlock Classes="Heading" Text="This Resolution Ends the Scenario in a..." Margin="0,0,0,0"/>
+						<UniformGrid Columns="2" Margin="0,5,0,0">
+							<RadioButton x:Name="successCB" Content="Success" Foreground="White" GroupName="resend"/>
+							<RadioButton x:Name="failCB" Content="Failure" Foreground="White" GroupName="resend"/>
+						</UniformGrid>
+					</StackPanel>
+				</WrapPanel>
+
+				<Button x:Name="okButton" Grid.Column="2" Margin="10" Background="MediumSeaGreen" Click="OkButton_Click" IsDefault="True">
+					<Image Source="/Assets/ok.png" Stretch="Uniform" Width="32" Margin="5"/>
+				</Button>
+
+				<Button x:Name="cancelButton" Grid.Column="3" Margin="0,10,10,10" Background="{StaticResource bgCancelDelete}" Click="CancelButton_Click" IsCancel="True" IsVisible="False">
+					<Image Source="/Assets/cancel.png" Stretch="Uniform" Width="32" Margin="5"/>
+				</Button>
+
+
+			</Grid>
+		</Border>
+	</Grid>
+</Window>

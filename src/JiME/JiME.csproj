@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace>JiME</RootNamespace>
+		<AssemblyName>JiME</AssemblyName>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<ApplicationIcon>Assets\app.ico</ApplicationIcon>
+		<!-- the views bind to plain CLR models with DataContext = this, so keep reflection bindings as the default -->
+		<AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+		<NoWarn>$(NoWarn);CS0649;CS0169;CS0414;CS1998;AVLN3001</NoWarn>
+
+		<Product>JiME Scenario Editor</Product>
+		<Description>Scenario editor for the Journeys in Middle-earth board game</Description>
+		<Company>GlowPuff, Open Fantasy Maps</Company>
+		<Version>0.19.0</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<AvaloniaResource Include="Assets\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Avalonia" Version="12.1.3" />
+		<PackageReference Include="Avalonia.Desktop" Version="12.1.3" />
+		<PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.3" />
+		<PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\JiME.Core\JiME.Core.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,190 @@
+<Window x:Class="JiME.Views.TokenEditorWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:JiME"
+				xmlns:core="using:System"
+        mc:Ignorable="d"
+        Title="Token Editor" Classes="DefaultWindow" WindowStartupLocation="CenterScreen" Width="800">
+
+	<Window.Resources>
+		<local:NullToVisibility x:Key="n2vis"/>
+		<local:TokenEnabled x:Key="tokenen"/>
+	</Window.Resources>
+
+	<Window.Styles>
+		<!--grid background-->
+		<Style Selector="Canvas#canvas">
+			<Setter Property="Background">
+				<DrawingBrush TileMode="Tile" DestinationRect="0,0,256,256" Opacity=".25">
+					<DrawingBrush.Drawing>
+						<GeometryDrawing>
+							<GeometryDrawing.Geometry>
+								<RectangleGeometry Rect="0,0,256,256"/>
+							</GeometryDrawing.Geometry>
+							<GeometryDrawing.Pen>
+								<Pen Brush="Gray" Thickness="1"/>
+							</GeometryDrawing.Pen>
+						</GeometryDrawing>
+					</DrawingBrush.Drawing>
+				</DrawingBrush>
+			</Setter>
+		</Style>
+	</Window.Styles>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+
+		<Grid Margin="10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="auto"/>
+			</Grid.ColumnDefinitions>
+
+			<Canvas x:Name="canvas" PointerPressed="Canvas_PointerPressed" PointerReleased="Canvas_PointerReleased" PointerMoved="Canvas_PointerMoved" Width="512" Height="512" HorizontalAlignment="Left" VerticalAlignment="Top">
+				<Image x:Name="tileImage" Width="512" Height="512" IsHitTestVisible="False"/>
+			</Canvas>
+
+			<Border Grid.Column="1" Width="250" Classes="callout" Margin="0,0,0,0">
+				<StackPanel>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto"/>
+						</Grid.ColumnDefinitions>
+					</Grid>
+
+					<Border Classes="callout" Background="{StaticResource bgColor}">
+						<StackPanel>
+							<TextBlock Text="Selected Tile" Classes="Heading" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding hexTile.idNumber}" Classes="SubText" HorizontalAlignment="Center"/>
+
+							<TextBlock Text="Token Slots Available" Classes="Heading" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding hexTile.tokenCount}" Classes="SubText" HorizontalAlignment="Center"/>
+
+							<Button x:Name="addToken"  Background="DodgerBlue" Margin="0,10,0,0" Foreground="White" Click="addToken_Click" Height="36">
+								<StackPanel Orientation="Horizontal" Margin="5,0">
+									<TextBlock Text="Add Token To Tile" Classes="Heading" VerticalAlignment="Center" Margin="0,0,5,0"/>
+									<Image Source="/Assets/add.png" Height="24"/>
+								</StackPanel>
+							</Button>
+
+							<Border Classes="callout" Margin="0,10,0,0">
+								<StackPanel>
+									<TextBlock Text="Selected Token:" Foreground="White" HorizontalAlignment="Center"/>
+
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="*"/>
+											<ColumnDefinition Width="auto"/>
+										</Grid.ColumnDefinitions>
+										<ComboBox Name="tokenCombo" VerticalAlignment="Center" Margin="0,5,0,0" ItemsSource="{Binding hexTile.tokenList}" SelectedValue="{Binding selected}" DisplayMemberBinding="{Binding dataName}" SelectionChanged="token_SelectionChanged"/>
+
+										<Button x:Name="removeToken" Grid.Column="1" Width="32" Background="{StaticResource bgCancelDelete}" Margin="5,0,0,0" Click="removeToken_Click">
+											<Image Source="/Assets/cancel.png"/>
+										</Button>
+									</Grid>
+
+									<TextBlock Text="Activate This Event:" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+									<ComboBox Name="interactionCB" ItemsSource="{Binding tokenInteractions}" DisplayMemberBinding="{Binding dataName}" SelectedValue="{Binding selected.triggerName}" SelectedValueBinding="{Binding dataName}" VerticalAlignment="Center" SelectionChanged="interactionCB_SelectionChanged" Margin="0,5,0,0"/>
+									<TextBlock Classes="SubText" TextWrapping="Wrap" Text="This is the Event this Token activates when Players click on it. Only Events marked as Token Interactions will appear in this dropdown." Margin="0,5,0,0"/>
+
+									<TextBlock Text="Triggered By:" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="*"/>
+											<ColumnDefinition Width="auto"/>
+										</Grid.ColumnDefinitions>
+
+										<ComboBox ItemsSource="{Binding scenario.triggersObserver}" DisplayMemberBinding="{Binding dataName}" SelectedValue="{Binding selected.triggeredByName}" SelectedValueBinding="{Binding dataName}" VerticalAlignment="Center"/>
+										<Button Grid.Column="1" x:Name="addTrigger" Width="32" Background="MediumSeaGreen" Margin="5,0,0,0" Click="addTrigger_Click">
+											<Image Source="/Assets/add2.png"/>
+										</Button>
+									</Grid>
+									<TextBlock Classes="SubText" TextWrapping="Wrap" Text="Tokens with this set will ONLY spawn when they are Triggered, instead of when the Tile Block is explored." Margin="0,3,0,0"/>
+								</StackPanel>
+							</Border>
+
+							<!--<UniformGrid Columns="2" Margin="0,5,0,0">
+								<Button x:Name="addSearch" Background="ForestGreen" Margin="0,0,2,0" Foreground="White" Content="+ Search" Click="addSearch_Click"/>
+								<Button x:Name="addPerson" Background="BlueViolet" Margin="2,0,0,0" Foreground="White" Content="+ Person" Click="addPerson_Click"/>
+							</UniformGrid>
+
+							<UniformGrid Columns="2" Margin="0,5,0,0">
+								<Button x:Name="addThreat" Background="DarkRed" Margin="0,0,2,0" Foreground="White" Content="+ Threat" Click="addThreat_Click"/>
+								<Button x:Name="addDarkness" Background="Black" Margin="2,0,0,0" Foreground="White" Content="+ Darkness" Click="addDarkness_Click"/>
+							</UniformGrid>-->
+						</StackPanel>
+					</Border>
+
+					<Border x:Name="explorationBox" Classes="callout" Background="{StaticResource bgColor}" Margin="0,10,0,0">
+						<StackPanel>
+							<TextBlock Classes="SubText" TextWrapping="Wrap" Text="Exploration Text is shown after a player explores this tile. To avoid showing the text, leave it empty."/>
+							<Button x:Name="addFlavor" Background="DodgerBlue" Margin="0,5,0,0" Foreground="White" Click="addFlavor_Click" Height="36" HorizontalAlignment="Center">
+								<StackPanel Orientation="Horizontal" Margin="5,0">
+									<TextBlock Text="Edit Exploration Text..." Classes="Heading" VerticalAlignment="Center" Margin="0,0,5,0"/>
+									<Image Source="/Assets/edit.png" Height="24"/>
+								</StackPanel>
+							</Button>
+							<TextBlock Text="Exploration Text is Empty" Classes="SubText" Margin="0,5,0,0" HorizontalAlignment="Center" Name="exploreStatus"/>
+						</StackPanel>
+					</Border>
+
+					<!--color key-->
+					<Border Classes="callout" Background="{StaticResource bgColor}" Margin="0,10,0,0">
+						<StackPanel>
+							<TextBlock Text="Color Key" Classes="Heading" HorizontalAlignment="Center"/>
+
+							<UniformGrid Columns="2">
+								<UniformGrid Columns="2" Margin="0,5,0,0">
+									<TextBlock Text="Search"  Classes="SubText"/>
+									<Ellipse Width="15" Height="15" Fill="ForestGreen" StrokeThickness="2" Stroke="White"/>
+								</UniformGrid>
+								<UniformGrid Columns="2" Margin="0,5,0,0">
+									<TextBlock Text="Person" Classes="SubText"/>
+									<Ellipse Width="15" Height="15" Fill="BlueViolet" StrokeThickness="2" Stroke="White"/>
+								</UniformGrid>
+								<UniformGrid Columns="2" Margin="0,5,0,0">
+									<TextBlock Text="Threat" Classes="SubText"/>
+									<Ellipse Width="15" Height="15" Fill="DarkRed" StrokeThickness="2" Stroke="White"/>
+								</UniformGrid>
+								<UniformGrid Columns="2" Margin="0,5,0,0">
+									<TextBlock Text="Darkness" Classes="SubText"/>
+									<Ellipse Width="15" Height="15" Fill="Black" StrokeThickness="2" Stroke="White"/>
+								</UniformGrid>
+							</UniformGrid>
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</Border>
+		</Grid>
+
+		<!--footer-->
+		<Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="Silver" HorizontalAlignment="Stretch" Background="#FF46464A">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="auto"/>
+				</Grid.ColumnDefinitions>
+
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+					<!--<TextBlock Classes="Heading" Text="Add Up To 5 Tiles" Margin="0,0,100,0"/>
+					<TextBlock Classes="Heading" Text="Rotate: Page Up/Page Down" Margin="20"/>-->
+					<TextBlock Margin="10" Classes="Heading" Text="Remove Selected Token: Del" />
+				</StackPanel>
+
+				<Button Grid.Column="1" x:Name="okButton" Margin="10" Background="MediumSeaGreen" Click="OkButton_Click" IsDefault="True">
+					<Image Source="/Assets/ok.png" Stretch="Uniform" Width="32" Margin="5"/>
+				</Button>
+
+				<!--<Button x:Name="cancelButton" Margin="0,10,10,10" Background="{StaticResource bgCancelDelete}" Click="CancelButton_Click" IsCancel="True">
+					<Image Source="/Assets/cancel.png" Stretch="Uniform" Width="32" Margin="5"/>
+				</Button>-->
+			</Grid>
+		</Border>
+	</Grid>
+</Window>

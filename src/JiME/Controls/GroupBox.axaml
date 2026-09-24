@@ -1,0 +1,35 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="using:JiME">
+	<!--WPF-like GroupBox; the WPF "DefaultGroupBox" style (silver text, 10 margin, 14pt) is the default look-->
+	<ControlTheme x:Key="{x:Type local:GroupBox}" TargetType="local:GroupBox">
+		<Setter Property="Foreground" Value="Silver"/>
+		<Setter Property="Margin" Value="10"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="Padding" Value="4"/>
+		<Setter Property="BorderBrush" Value="#FF6E6E73"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Grid RowDefinitions="Auto,*">
+					<ContentPresenter Name="PART_HeaderPresenter"
+					                  Content="{TemplateBinding Header}"
+					                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+					                  Margin="6,0,0,3"/>
+					<Border Grid.Row="1"
+					        BorderBrush="{TemplateBinding BorderBrush}"
+					        BorderThickness="{TemplateBinding BorderThickness}"
+					        Background="{TemplateBinding Background}"
+					        CornerRadius="3"
+					        Padding="{TemplateBinding Padding}">
+						<ContentPresenter Name="PART_ContentPresenter"
+						                  Content="{TemplateBinding Content}"
+						                  ContentTemplate="{TemplateBinding ContentTemplate}"
+						                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+						                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+					</Border>
+				</Grid>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+</ResourceDictionary>

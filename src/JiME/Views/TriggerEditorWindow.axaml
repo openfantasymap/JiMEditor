@@ -1,0 +1,57 @@
+<Window x:Class="JiME.Views.TriggerEditorWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Trigger Editor" Width="100" Classes="DefaultWindow" WindowStartupLocation="CenterScreen" Opened="Window_ContentRendered">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+
+		<Border Classes="callout" Margin="5">
+			<StackPanel Margin="0">
+				<TextBlock x:Name="nameLabel" Classes="Heading" Text="Trigger Name:"/>
+				<TextBox x:Name="nameTB" Classes="DefaultTextBox" Margin="0,5,10,0" Width="250" HorizontalAlignment="Left"/>
+
+				<StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+					<CheckBox x:Name="multiCB" Content="This Trigger is a Multi-Trigger" Foreground="White" VerticalAlignment="Center"/>
+					<CheckBox x:Name="campaignCB" Content="This Trigger is a Campaign Trigger" Foreground="White" VerticalAlignment="Center" Margin="50,0,0,0" IsEnabled="False"/>
+				</StackPanel>
+			</StackPanel>
+		</Border>
+
+		<StackPanel Margin="10,0,10,10" Grid.Row="1">
+			<TextBlock Classes="SubText" TextWrapping="Wrap" Margin="0,5,0,0">
+					Triggers are <Italic>True / False</Italic> values that are set during the Scenario to keep track of player actions. <Bold>All Triggers start off with a value of <Italic>False</Italic></Bold>.
+			</TextBlock>
+			<TextBlock Classes="SubText" TextWrapping="Wrap" Margin="0,5,0,0">
+				Triggers are also used by many components to get notified of when to activate. For example, Triggers can activate Events, start and end Objectives, activate Chapters, end the Scenario, and other actions that use Triggers.
+			</TextBlock>
+
+			<Button HorizontalAlignment="Left" Grid.Column="1" x:Name="help" Background="#FFC98800" Height="32"  Click="help_Click" Margin="0,10,0,0">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="/Assets/help.png" Stretch="Uniform"/>
+					<TextBlock Text="Trigger Help" Classes="Heading" Margin="5,0,0,0"/>
+				</StackPanel>
+			</Button>
+		</StackPanel>
+
+		<!--Footer-->
+		<Border Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="Silver" HorizontalAlignment="Stretch" Background="#FF46464A">
+			<WrapPanel HorizontalAlignment="Right" >
+
+				<Button x:Name="okButton" Margin="10" Background="MediumSeaGreen" Click="OkButton_Click" IsDefault="True">
+					<Image Source="/Assets/ok.png" Stretch="Uniform" Width="32" Margin="5"/>
+				</Button>
+
+				<Button x:Name="cancelButton" Margin="0,10,10,10" Background="{StaticResource bgCancelDelete}" Click="CancelButton_Click" IsCancel="True">
+					<Image Source="/Assets/cancel.png" Stretch="Uniform" Width="32" Margin="5"/>
+				</Button>
+			</WrapPanel>
+		</Border>
+	</Grid>
+</Window>

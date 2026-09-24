@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/JiME.Core/JiME.Core.csproj" />
+    <Project Path="src/JiME/JiME.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/JiME.Tests/JiME.Tests.csproj" />
+  </Folder>
+</Solution>

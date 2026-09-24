@@ -1,0 +1,309 @@
+<Window x:Class="JiME.Views.MultiEventWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:JiME"
+        mc:Ignorable="d"
+				Opened="Window_ContentRendered"
+        Title="Multi-Event Editor" Classes="DefaultWindow" WindowStartupLocation="CenterScreen" Width="750" Closing="Window_Closing">
+
+	<Window.Styles>
+		<Style Selector="RadioButton">
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Margin" Value="0,5"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+	</Window.Styles>
+
+	<StackPanel>
+		<TabControl Margin="5" Background="#FF2D2D30" BorderThickness="0,1,0,0">
+
+			<!--general properties-->
+			<TabItem Header="General Properties" Padding="5">
+				<StackPanel Margin="0,5,0,0">
+					<Border Classes="callout" IsVisible="{Binding isThreatTriggered, Converter={StaticResource bvis}}" Margin="0,0,0,10">
+						<StackPanel>
+							<TextBlock Classes="Heading" Text="This Event is triggered by a Scenario Threat Threshold." HorizontalAlignment="Center"/>
+
+							<TextBlock Classes="SubText" HorizontalAlignment="Center">
+								Events triggered by Threat Thresholds cannot be Token Interactions and cannot be Triggered By another source.
+							</TextBlock>
+
+						</StackPanel>
+					</Border>
+
+					<!--event name/lore-->
+					<Border Classes="callout">
+						<UniformGrid Columns="2">
+							<StackPanel>
+								<TextBlock Classes="Heading" Text="Event Name:"/>
+								<TextBlock Classes="SubText">
+					A short name used within the Editor. <Bold><Italic>Required</Italic></Bold>
+								</TextBlock>
+								<TextBox x:Name="nameTB" Text="{Binding interaction.dataName, UpdateSourceTrigger=PropertyChanged}" Classes="DefaultTextBox" Margin="0,5" Width="250" HorizontalAlignment="Left" TextChanged="nameTB_TextChanged"/>
+
+								<StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+									<TextBlock Classes="Heading" Margin="0,0,10,0" Text="Lore/ XP / Threat Rewards:"/>
+									<TextBox Classes="DefaultTextBox" Width="25" Text="{Binding interaction.loreReward}"/>
+									<TextBox Classes="DefaultTextBox" Width="25" Text="{Binding interaction.xpReward}" Margin="10,0"/>
+									<TextBox Classes="DefaultTextBox" Width="25" Text="{Binding interaction.threatReward}"/>
+								</StackPanel>
+								<TextBlock Text="Rewards are given after the Event is finished activating." Classes="SubText" Margin="0,5,0,0"/>
+							</StackPanel>
+
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+								<Button x:Name="groupHelp" Background="#FFC98800" Click="groupHelp_Click" Width="32" Height="32" Margin="10,0,0,0">
+									<Image Source="/Assets/help.png" Stretch="Uniform"/>
+								</Button>
+								<StackPanel Margin="10,0,0,0">
+									<TextBlock Classes="SubText" Text="You can place this Event into a Random Interaction Group." TextWrapping="Wrap" VerticalAlignment="Center" Width="290"/>
+									<TextBlock x:Name="groupInfo" Margin="0,5,0,0" Classes="SubText" Text="This Event is in the following group: None"/>
+								</StackPanel>
+							</StackPanel>
+						</UniformGrid>
+					</Border>
+
+					<!--token interaction-->
+					<Border x:Name="isEventBox" Classes="callout" Margin="0,10,0,0">
+						<StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<CheckBox x:Name="isTokenCB" Content="This Event is a Token Interaction" Foreground="White" IsChecked="{Binding interaction.isTokenInteraction}" VerticalAlignment="Center" Click="isTokenCB_Click"/>
+								<Button x:Name="tokenHelp" Background="#FFC98800" Click="tokenHelp_Click" Width="32" Height="32" Margin="10,0,0,0">
+									<Image Source="/Assets/help.png" Stretch="Uniform"/>
+								</Button>
+							</StackPanel>
+
+							<StackPanel x:Name="tokenTypeBox" Orientation="Horizontal" IsVisible="{Binding ElementName=isTokenCB, Path=IsChecked, Converter={StaticResource bvis}}">
+								<TextBlock Classes="Heading" Text="Token Type:" Margin="0,0,10,0"/>
+								<RadioButton x:Name="personRadio" Content="Person" Margin="0,0,20,0" Click="tokenTypeClick"/>
+								<RadioButton x:Name="searchRadio" Content="Search" Margin="0,0,20,0" Click="tokenTypeClick"/>
+								<RadioButton x:Name="threatRadio" Content="Threat" Margin="0,0,20,0" Click="tokenTypeClick"/>
+								<RadioButton x:Name="darkRadio" Content="Darkness" Click="tokenTypeClick"/>
+							</StackPanel>
+							<StackPanel Orientation="Horizontal" Name="personType" IsVisible="False">
+								<TextBlock Text="Person Type:" Classes="Heading" Margin="0,0,10,0"/>
+								<RadioButton x:Name="humanRadio" Content="Human" Margin="0,0,20,0"/>
+								<RadioButton x:Name="elfRadio" Content="Elf" Margin="0,0,20,0"/>
+								<RadioButton x:Name="hobbitRadio" Content="Hobbit" Margin="0,0,20,0"/>
+								<RadioButton x:Name="dwarfRadio" Content="Dwarf"/>
+							</StackPanel>
+
+							<TextBlock Classes="SubText" TextWrapping="Wrap" Margin="0,5,0,0">
+							Token Interactions are triggered by players as they journey across the map. When a player clicks a Token, the Flavor Text below is shown. The player can decide to use an Action to Interact with the Token, after which the Event Text is shown, along with the Event itself.
+							</TextBlock>
+
+							<TextBlock Classes="SubText" TextWrapping="Wrap" Margin="0,5,0,0">
+								If this Token Interaction Event has already been assigned to a <Bold>Token</Bold> in the Tile Editor and you uncheck the Token Interaction setting above, that Token's <Italic>Token Interaction Trigger</Italic> will automatically be set to <Italic>None</Italic> because this Event will no longer be a Token Interaction.
+							</TextBlock>
+						</StackPanel>
+					</Border>
+
+					<!--triggers-->
+					<Border x:Name="triggerBox" Classes="callout" Margin="0,10,0,0">
+						<StackPanel>
+							<UniformGrid Columns="2">
+								<StackPanel HorizontalAlignment="Left">
+									<TextBlock Text="Triggered By (Optional):" Classes="Heading"/>
+									<StackPanel Orientation="Horizontal">
+										<ComboBox VerticalAlignment="Center" Name="triggeredByCB" Width="250" ItemsSource="{Binding scenario.triggersObserver}" DisplayMemberBinding="{Binding dataName}" SelectedValue="{Binding interaction.triggerName}" SelectedValueBinding="{Binding dataName}" Margin="0" HorizontalAlignment="Left" IsEnabled="{Binding ElementName=isTokenCB, Path=IsChecked, Converter={StaticResource binv}}"/>
+										<Button x:Name="addMainTriggerButton" Background="MediumSeaGreen" Margin="10,0" Height="32" Width="32" Click="addMainTriggerButton_Click" IsEnabled="{Binding ElementName=isTokenCB, Path=IsChecked, Converter={StaticResource binv}}">
+											<Image Source="/Assets/add2.png"/>
+										</Button>
+									</StackPanel>
+								</StackPanel>
+
+								<StackPanel HorizontalAlignment="Left" Margin="10,0,0,0">
+									<TextBlock Text="Set Trigger After Event Is Resolved (Optional):" Classes="Heading"/>
+									<StackPanel Orientation="Horizontal">
+										<ComboBox VerticalAlignment="Center" HorizontalAlignment="Left" Width="250" ItemsSource="{Binding scenario.triggersObserver}" DisplayMemberBinding="{Binding dataName}" SelectedValue="{Binding interaction.triggerAfterName}" SelectedValueBinding="{Binding dataName}" Margin="0"/>
+										<Button x:Name="addMainTriggerAfterButton" Background="MediumSeaGreen" Margin="10,0" Height="32" Width="32" Click="addMainTriggerAfterButton_Click">
+											<Image Source="/Assets/add2.png"/>
+										</Button>
+									</StackPanel>
+								</StackPanel>
+							</UniformGrid>
+							<TextBlock Classes="SubText" Margin="0,5,0,0" TextWrapping="Wrap">
+								Multiple Events can be 'Triggered By' the same Trigger. When this happens, only ONE of the Events will be randomly chosen to fire.
+							</TextBlock>
+						</StackPanel>
+					</Border>
+
+					<UniformGrid Columns="2">
+						<!--event text-->
+						<Border x:Name="eventbox" Classes="callout" Margin="0,10,5,0">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="auto"/>
+								</Grid.ColumnDefinitions>
+
+								<StackPanel>
+									<TextBlock Text="Event Text" Classes="Heading"/>
+									<TextBlock Classes="SubText" TextWrapping="Wrap">
+					Use the Event Text to describe the actual Event that has been activated. Example: Describe an Enemy Threat, present a Test, describe a Decision, etc.
+									</TextBlock>
+								</StackPanel>
+								<Button Grid.Column="1" x:Name="editEventButton" Background="CornflowerBlue" Margin="10,0,0,0" Click="EditEventButton_Click" Width="46" Height="46">
+									<Image Source="/Assets/edit.png"/>
+								</Button>
+							</Grid>
+						</Border>
+
+						<!--flavor text-->
+						<Border x:Name="flavorbox" Classes="callout" Margin="5,10,0,0">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="auto"/>
+								</Grid.ColumnDefinitions>
+
+								<StackPanel>
+									<TextBlock Text="Flavor Text For Token Interaction" Classes="Heading"/>
+									<TextBlock Classes="SubText" TextWrapping="Wrap">
+					This text is shown when a player interacts with a Token. Use it to hint at the Event. Flavor Text is only shown if this Event is a Token Interaction.
+									</TextBlock>
+								</StackPanel>
+								<Button Grid.Column="1" x:Name="editFlavorButton" Background="CornflowerBlue" Margin="10,0,0,0" Click="EditFlavorButton_Click" Width="46" Height="46" IsEnabled="{Binding ElementName=isTokenCB,Path=IsChecked}">
+									<Image Source="/Assets/edit.png"/>
+								</Button>
+							</Grid>
+						</Border>
+					</UniformGrid>
+				</StackPanel>
+			</TabItem>
+
+			<!--event properties-->
+			<TabItem Header="Multi-Event" Padding="5">
+				<StackPanel Margin="0,5,0,0">
+					<Border Classes="callout">
+						<TextBlock Classes="SubText" Text="Multi-Events are special Events that, when activated, will sequentially activate the list of Triggers or Events you specify, in order. They also optionally show Event Text of their own after being activated." VerticalAlignment="Center" TextWrapping="Wrap" />
+					</Border>
+
+					<Border Classes="callout" Margin="0,10">
+						<StackPanel>
+							<TextBlock Text="Silently Activate:" Classes="Heading"/>
+							<CheckBox x:Name="silenCB" Content="This Event activates silently without showing its Event Text" Foreground="White" Margin="0,5,0,0" IsChecked="{Binding interaction.isSilent}" Click="silenCB_Click"/>
+							<TextBlock Text="If this Event is Silent, its Event Text on the General Properties tab will not be shown when it activates. It will just fire the Triggers or Events you specify below without showing story text of its own." Classes="SubText" TextWrapping="Wrap" Margin="0,5,0,0"/>
+						</StackPanel>
+					</Border>
+
+					<!--triggers-->
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,0,0,0">
+						<RadioButton x:Name="triggerRB" GroupName="multirb" Click="triggerRB_Click"/>
+						<Border x:Name="meTriggerBox" Classes="callout" Width="679" Margin="10,0,0,0">
+							<StackPanel>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="auto"/>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="auto"/>
+									</Grid.ColumnDefinitions>
+									<TextBlock Classes="Heading" Text="Fire These Triggers:"/>
+									<TextBlock Grid.Column="1"/>
+									<StackPanel Orientation="Horizontal" Grid.Column="2">
+										<ComboBox x:Name="triggerCB" HorizontalAlignment="Left" VerticalAlignment="Center" ItemsSource="{Binding scenario.triggersObserver}" SelectedValueBinding="{Binding dataName}" DisplayMemberBinding="{Binding dataName}" MinWidth="200" SelectionChanged="triggerCB_SelectionChanged"/>
+
+										<Button x:Name="addSelectedTriggerButton" Click="addSelectedTriggerButton_Click" Content="Add Selected Trigger" Background="DodgerBlue" Foreground="White" Margin="10,0,0,0" IsEnabled="False"/>
+										<Button x:Name="addTriggerButton" Background="MediumSeaGreen" Margin="10,0,0,0" Height="32" Width="32" Click="AddTriggerButton_Click">
+											<Image Source="/Assets/add2.png"/>
+										</Button>
+									</StackPanel>
+								</Grid>
+
+								<ItemsControl Padding="5" ItemsSource="{Binding interaction.triggerList}">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<WrapPanel />
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Border Classes="callout" Background="{StaticResource bgButtonColor}" Margin="0,0,5,5">
+												<StackPanel Orientation="Horizontal">
+													<TextBlock Text="{Binding}" Classes="SubText" Foreground="White" VerticalAlignment="Center"/>
+													<Button x:Name="removeTriggerButton" Background="{StaticResource bgCancelDelete}" Foreground="White" Margin="10,0,0,0" Height="32" Width="32" Click="removeTriggerButton_Click" DataContext="{Binding}">
+														<Image Source="/Assets/cancel.png"/>
+													</Button>
+												</StackPanel>
+											</Border>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</StackPanel>
+
+						</Border>
+					</StackPanel>
+
+					<TextBlock Text="-OR-" Classes="Heading" HorizontalAlignment="Center" Margin="0,5"/>
+
+					<!--events-->
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+						<RadioButton x:Name="eventRB" GroupName="multirb" Click="eventRB_Click"/>
+						<Border x:Name="meEventBox" Classes="callout" Width="679" Margin="10,0,0,0">
+							<StackPanel>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="auto"/>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="auto"/>
+									</Grid.ColumnDefinitions>
+									<TextBlock Classes="Heading" Text="Fire These Events:"/>
+									<TextBlock Grid.Column="1"/>
+									<StackPanel Orientation="Horizontal" Grid.Column="2">
+										<ComboBox x:Name="eventCB" HorizontalAlignment="Left" VerticalAlignment="Center" ItemsSource="{Binding scenario.interactionObserver}" SelectedValueBinding="{Binding dataName}" DisplayMemberBinding="{Binding dataName}" MinWidth="200" SelectionChanged="eventCB_SelectionChanged"/>
+										<Button x:Name="addSelectedEventButton" Click="addSelectedEventButton_Click" Content="Add Selected Event" Background="DodgerBlue" Foreground="White" Margin="10,0,0,0" IsEnabled="False"/>
+									</StackPanel>
+								</Grid>
+
+								<ItemsControl Padding="5" ItemsSource="{Binding interaction.eventList}">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<WrapPanel />
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Border Classes="callout" Background="{StaticResource bgButtonColor}" Margin="0,0,5,5">
+												<StackPanel Orientation="Horizontal">
+													<TextBlock Text="{Binding}" Classes="SubText" Foreground="White" VerticalAlignment="Center"/>
+													<Button x:Name="removeEventButton" Background="{StaticResource bgCancelDelete}" Foreground="White" Margin="10,0,0,0" Height="32" Width="32" Click="removeEventButton_Click" DataContext="{Binding}">
+														<Image Source="/Assets/cancel.png"/>
+													</Button>
+												</StackPanel>
+											</Border>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+								<!--<StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+									<ComboBox x:Name="eventCB2" HorizontalAlignment="Left" VerticalAlignment="Center" ItemsSource="{Binding interaction.eventList}" FontSize="12" Width="250" SelectedItem="{Binding selectedEvent}"/>
+									<Button x:Name="removeEventButton" Click="removeEventButton_Click" Background="{StaticResource bgCancelDelete}" Foreground="White" Margin="10,0,0,0" Height="32" Width="32">
+										<Image Source="/Assets/cancel.png"/>
+									</Button>
+									<TextBlock Text="An Event can only be added to the list once." Margin="10,0,0,0" Classes="SubText" VerticalAlignment="Center"/>
+								</StackPanel>-->
+							</StackPanel>
+
+						</Border>
+					</StackPanel>
+				</StackPanel>
+			</TabItem>
+		</TabControl>
+
+		<!--footer-->
+		<Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="Silver" HorizontalAlignment="Stretch" Background="#FF46464A">
+			<WrapPanel HorizontalAlignment="Right" >
+
+				<Button x:Name="okButton" Margin="10" Background="MediumSeaGreen" Click="OkButton_Click" IsDefault="True">
+					<Image Source="/Assets/ok.png" Stretch="Uniform" Width="32" Margin="5"/>
+				</Button>
+
+				<Button x:Name="cancelButton" Margin="0,10,10,10" Background="{StaticResource bgCancelDelete}" Click="CancelButton_Click" IsCancel="True">
+					<Image Source="/Assets/cancel.png" Stretch="Uniform" Width="32" Margin="5"/>
+				</Button>
+			</WrapPanel>
+		</Border>
+	</StackPanel>
+</Window>

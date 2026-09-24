@@ -1,0 +1,252 @@
+<Window x:Class="JiME.Views.ScenarioWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:JiME"
+        mc:Ignorable="d"
+        Title="Scenario Settings" Classes="DefaultWindow" Width="800" SizeToContent="Height" WindowStartupLocation="CenterOwner" Opened="Window_ContentRendered" Closing="Window_Closing" MaxHeight="850">
+
+	<Window.Styles>
+		<Style Selector="ScrollBar">
+			<Setter Property="Background" Value="#333337"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+		</Style>
+		<Style Selector="TextBox">
+			<Setter Property="FontSize" Value="16"/>
+		</Style>
+	</Window.Styles>
+
+	<Window.Resources>
+		<local:BoolInvertVisibility x:Key="b2vis"/>
+		<local:BoolInvertConverter x:Key="binv"/>
+	</Window.Resources>
+
+	<StackPanel>
+		<!--campaign notice-->
+		<Border x:Name="campaignNotice" Classes="callout" Margin="5,5,5,0" IsVisible="False">
+			<StackPanel>
+				<TextBlock Classes="Heading" Text="Campaign GUID" HorizontalAlignment="Center"/>
+				<TextBlock x:Name="campaignGUID" Classes="Heading" Text="" HorizontalAlignment="Center"/>
+			</StackPanel>
+		</Border>
+
+		<Grid Margin="5">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="auto"/>
+			</Grid.ColumnDefinitions>
+
+			<!--name and rewards-->
+			<Border Classes="callout" Margin="0,0,5,0">
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Classes="Heading" Text="Scenario Title:" />
+					<TextBox x:Name="nameTB" Text="{Binding scenarioName, UpdateSourceTrigger=PropertyChanged}" Margin="10,0" MinWidth="300" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+				</StackPanel>
+			</Border>
+
+			<!--scenario type-->
+			<Border Grid.Column="2" Classes="callout" Margin="5,0,0,0">
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Classes="Heading" Text="Scenario Type:" Margin="0,0,10,0"/>
+					<RadioButton Content="Journey" Foreground="White" VerticalAlignment="Center" IsChecked="{Binding scenario.scenarioTypeJourney}" Click="RadioType_Checked"/>
+					<RadioButton Content="Battle" Foreground="White" VerticalAlignment="Center" Margin="25,0,0,0"  IsChecked="{Binding scenario.scenarioTypeJourney, Converter={StaticResource binv}}" Click="RadioType_Checked"/>
+				</StackPanel>
+			</Border>
+		</Grid>
+
+		<!--rewards-->
+		<Border  Grid.Row="1" Classes="callout" Margin="5">
+			<StackPanel>
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+
+					<StackPanel Grid.Column="0" HorizontalAlignment="Center">
+						<TextBlock Text="First Objective (Optional):" Classes="Heading"/>
+						<ComboBox Name="objectiveCB" ItemsSource="{Binding scenario.objectiveObserver}" DisplayMemberBinding="{Binding dataName}" SelectedValue="{Binding scenario.objectiveName}" SelectedValueBinding="{Binding dataName}" Margin="0,5,0,0"/>
+					</StackPanel>
+
+					<StackPanel Grid.Column="1" Margin="30,0,20,0" Orientation="Horizontal">
+						<TextBlock Text="Shadow Phase Fear:" Classes="Heading"/>
+						<TextBox Text="{Binding scenario.shadowFear}" Width="32" Margin="10,0,0,0" VerticalAlignment="Center"/>
+					</StackPanel>
+
+					<StackPanel Grid.Column="2" Orientation="Horizontal">
+						<!--rewards-->
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="Starting Lore:" Classes="Heading" VerticalAlignment="Center" Margin="0,0,10,0"/>
+							<TextBox Width="32" VerticalAlignment="Center" Text="{Binding scenario.loreStartValue}"/>
+						</StackPanel>
+					</StackPanel>
+
+					<Button x:Name="specialBtn" Grid.Column="3" Content="Story / Special Instructions..." Background="DodgerBlue" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Right" Click="specialBtn_Click" Height="36" FontWeight="Bold" FontSize="14"/>
+				</Grid>
+
+				<TextBlock TextWrapping="Wrap" Classes="SubText" Text="The Story/Special Instructions text and Starting Lore are shown to Players in the Companion App before embarking on the Scenario." Margin="0,5,0,0"/>
+			</StackPanel>
+		</Border>
+		<!--rewards-->
+		<Border  Grid.Row="2" Classes="callout" Margin="5">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<TextBlock Text="Scenario Rewards" Classes="Heading"/>
+
+				<StackPanel Grid.Column="1" Orientation="Horizontal" Margin="20,0,0,0">
+					<!--rewards-->
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Lore Reward:" Classes="Heading" VerticalAlignment="Center" Margin="0,0,10,0"/>
+						<TextBox Width="32" VerticalAlignment="Center" Text="{Binding scenario.loreReward}"/>
+
+						<TextBlock Text="XP Reward:" Classes="Heading" VerticalAlignment="Center" Margin="15,0,10,0"/>
+						<TextBox Width="32" VerticalAlignment="Center" Text="{Binding scenario.xpReward}"/>
+					</StackPanel>
+				</StackPanel>
+
+				<TextBlock Margin="0,0,0,0" Grid.Column="2" Text="Lore and XP Rewards are only relevant for Campaigns." Classes="SubText" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</Grid>
+		</Border>
+
+		<!--Threat-->
+		<local:GroupBox Grid.Row="3" Grid.ColumnSpan="2" Header="Threat Settings" Foreground="Silver" Margin="5,0" FontSize="14" Padding="5">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+
+				<Grid Grid.Row="0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="auto"/>
+					</Grid.ColumnDefinitions>
+					<CheckBox x:Name="noThreatCheck" Content="Don't use Threat" Foreground="White" IsChecked="{Binding scenario.threatNotUsed}"/>
+
+					<Button x:Name="addThreatButton" Grid.Column="1" VerticalAlignment="Center" Background="DodgerBlue" Click="addThreatButton_Click" IsEnabled="{Binding ElementName=noThreatCheck, Path=IsChecked, Converter={StaticResource binv}}" HorizontalAlignment="Left">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="Add Threat" Classes="Heading" Margin="0,0,5,0" VerticalAlignment="Center"/>
+							<Image Source="/Assets/add.png" Height="24" Width="24"/>
+						</StackPanel>
+					</Button>
+				</Grid>
+				<Grid Grid.Row="1" IsVisible="{Binding ElementName=noThreatCheck,Path=IsChecked,Converter={StaticResource b2vis}}" Margin="0,0,0,5">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+
+					<TextBlock Text="Max Threat:" Classes="Heading"/>
+					<TextBox Grid.Column="1" Width="32" Text="{Binding scenario.threatMax}" Margin="10,0" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="3" FontWeight="Bold" Text="Only Events that are not Token Interactions can be assigned to Threat Threshold Trigger Events." TextWrapping="Wrap" Classes="SubText" VerticalAlignment="Center"/>
+				</Grid>
+
+				<ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" MaxHeight="200">
+					<ItemsControl x:Name="threatList" Background="{StaticResource  bgColor}" BorderThickness="0">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border Classes="callout" Padding="5" Margin="0,2" HorizontalAlignment="Stretch">
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="auto"/>
+											<ColumnDefinition Width="*"/>
+										</Grid.ColumnDefinitions>
+
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Text="Threshold:" VerticalAlignment="Center" Foreground="White"/>
+											<TextBox Margin="10,0" VerticalAlignment="Center" Text="{Binding theThreat.threshold, UpdateSourceTrigger=PropertyChanged}" Width="32"/>
+
+											<TextBlock Text="Triggered Event:" VerticalAlignment="Center" Margin="20,0,10,0"  Foreground="White"/>
+											<ComboBox x:Name="eventInteractionCB" ItemsSource="{Binding threatItemCollection}" DisplayMemberBinding="{Binding trigger.dataName}" SelectedItem="{Binding selectedItem}" SelectionChanged="EventInteractionCB_SelectionChanged" VerticalAlignment="Center" Width="250"/>
+										</StackPanel>
+
+										<Button Grid.Column="1" x:Name="removeThreat" Background="{StaticResource bgCancelDelete}" Click="RemoveThreat_Click" Width="32" HorizontalAlignment="Right" Margin="10,0,0,0">
+											<Image Width="16" Source="/Assets/remove.png"/>
+										</Button>
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+			</Grid>
+		</local:GroupBox>
+
+		<StackPanel Margin="5,10,5,5">
+			<UniformGrid Columns="2">
+				<Border Classes="callout" Margin="0,0,5,0" VerticalAlignment="Top">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto"/>
+						</Grid.ColumnDefinitions>
+
+						<StackPanel>
+							<TextBlock Text="Introduction Text" Classes="Heading"/>
+							<TextBlock TextWrapping="Wrap" Classes="SubText">
+					The Introduction Text is shown at the beginning of the Scenario to describe the mission. If it's left empty, it will not be shown.
+							</TextBlock>
+						</StackPanel>
+						<Button x:Name="editIntroButton" Grid.Column="1" Margin="5,0,5,0" Padding="5" Background="CornflowerBlue" Click="EditIntroButton_Click" VerticalAlignment="Center">
+							<Image Source="/Assets/edit.png" Width="32" />
+						</Button>
+					</Grid>
+				</Border>
+
+				<!--Resulution text-->
+				<Border Classes="callout" Margin="5,0,0,0">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto"/>
+						</Grid.ColumnDefinitions>
+
+						<StackPanel>
+							<TextBlock Text="Scenario Resolution Text" Classes="Heading"/>
+							<TextBlock TextWrapping="Wrap" Classes="SubText">
+					All Scenarios have at least one Resolution that is displayed at the end of the Scenario. Multiple Resolutions can be created and triggered, depending on the success, failure, or other specified conditions encountered during the Scenario.
+							</TextBlock>
+							<ComboBox x:Name="resolutionCB" DisplayMemberBinding="{Binding dataName}" SelectedIndex="0" Margin="0,5,0,0"/>
+
+						</StackPanel>
+
+						<StackPanel Grid.Column="1" Margin="5,0,0,0">
+							<Button x:Name="addResolutionButton" Padding="5" Background="MediumSeaGreen" Click="AddResolutionButton_Click">
+								<Image Source="/Assets/add.png" Width="24"/>
+							</Button>
+							<Button x:Name="removeResolutionButton" Margin="0,5" Padding="5" Background="{StaticResource bgCancelDelete}" Click="RemoveResolutionButton_Click">
+								<Image Source="/Assets/remove.png" Width="24"/>
+							</Button>
+							<Button x:Name="resolutionEditButton" Padding="5" Background="CornflowerBlue" Click="ResolutionEditButton_Click">
+								<Image Source="/Assets/edit.png" Width="24"/>
+							</Button>
+						</StackPanel>
+					</Grid>
+				</Border>
+			</UniformGrid>
+		</StackPanel>
+
+		<!--Footer-->
+		<Border Grid.ColumnSpan="2" Grid.Row="5" BorderThickness="0,1,0,0" BorderBrush="Silver" HorizontalAlignment="Stretch" Background="#FF46464A">
+			<WrapPanel HorizontalAlignment="Right" >
+
+				<Button x:Name="okButton" Margin="10" Background="MediumSeaGreen" Click="OkButton_Click" IsDefault="True" IsCancel="True">
+					<Image Source="/Assets/ok.png" Stretch="Uniform" Width="32" Margin="5"/>
+				</Button>
+
+			</WrapPanel>
+		</Border>
+
+	</StackPanel>
+</Window>

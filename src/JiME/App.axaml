@@ -1,0 +1,41 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:JiME"
+             x:Class="JiME.App"
+             Name="JiME Editor"
+             RequestedThemeVariant="Dark">
+
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Assets/Shapes.axaml"/>
+				<ResourceInclude Source="/Controls/GroupBox.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<!--colors-->
+			<SolidColorBrush x:Key="bgColor" Color="#FF2D2D30"/>
+			<SolidColorBrush x:Key="bgColorLight" Color="#FF46464A"/>
+			<SolidColorBrush x:Key="bgCancelDelete" Color="#ff4200"/>
+			<SolidColorBrush x:Key="bgButtonColor" Color="#FF5E5E63"/>
+
+			<!--Fluent theme overrides: WPF-like tab headers (see Styles/JiMEStyles.axaml)-->
+			<SolidColorBrush x:Key="TabItemHeaderForegroundSelected" Color="Black"/>
+			<SolidColorBrush x:Key="TabItemHeaderForegroundSelectedPointerOver" Color="Black"/>
+			<SolidColorBrush x:Key="TabItemHeaderForegroundSelectedPressed" Color="Black"/>
+			<SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill" Color="Transparent"/>
+
+			<!--converters shared by all windows (windows may still declare their own)-->
+			<local:TitleConverter x:Key="titleConverter"/>
+			<local:ProjectTypeConverter x:Key="ptypeConverter"/>
+			<local:BoolInvertConverter x:Key="binv"/>
+			<local:BoolToVisibleConverter x:Key="bvis"/>
+			<local:BoolInvertVisibility x:Key="binvVis"/>
+			<local:NullToVisibility x:Key="n2vis"/>
+		</ResourceDictionary>
+	</Application.Resources>
+
+	<Application.Styles>
+		<FluentTheme />
+		<StyleInclude Source="/Styles/JiMEStyles.axaml"/>
+	</Application.Styles>
+</Application>
