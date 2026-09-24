@@ -1,0 +1,17 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<!--brushes for the battle map editor; the Path piece styles (box1, box2, wall) are in Styles/JiMEStyles.axaml-->
+
+	<!--wall colors-->
+	<SolidColorBrush Color="#FF8B5000" x:Key="wallBrown" />
+	<SolidColorBrush Color="#FF0083FF" x:Key="wallRiver" />
+	<SolidColorBrush Color="#26C0C0C0" x:Key="wallNone" />
+	<SolidColorBrush Color="#26FFFFFF" x:Key="wallOutline" />
+	<!--feature colors-->
+	<SolidColorBrush Color="#7F000000" x:Key="pit" />
+	<SolidColorBrush Color="#7FFFFFFF" x:Key="mist" />
+	<SolidColorBrush Color="#7F8B5000" x:Key="barrels" />
+	<SolidColorBrush Color="#BF522700" x:Key="table" />
+	<SolidColorBrush Color="#7FFF3700" x:Key="firepit" />
+	<SolidColorBrush Color="#7F888888" x:Key="statue" />
+</ResourceDictionary>

@@ -1,0 +1,156 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<!--
+	Ported from the WPF App.xaml keyed styles. Use them with Classes instead of Style="{StaticResource ...}":
+	  TextBlock: Heading, SubText, ButtonHeading   Border: callout   TextBox: DefaultTextBox
+	  Window: DefaultWindow                        Button: btn, iconbutton
+	  Path (battle map pieces, see Assets/Shapes.axaml): box1, box2, wall
+	-->
+
+	<!--text headings-->
+	<Style Selector="TextBlock.Heading">
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+
+	<!--text sub headings-->
+	<Style Selector="TextBlock.SubText">
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="Foreground" Value="Silver"/>
+	</Style>
+
+	<!--project button heading-->
+	<Style Selector="TextBlock.ButtonHeading">
+		<Setter Property="FontSize" Value="16"/>
+		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+
+	<!--callout box-->
+	<Style Selector="Border.callout">
+		<Setter Property="Padding" Value="10"/>
+		<Setter Property="CornerRadius" Value="5"/>
+		<Setter Property="Background" Value="{StaticResource bgColorLight}"/>
+	</Style>
+
+	<!--default textbox-->
+	<Style Selector="TextBox.DefaultTextBox">
+		<Setter Property="MinHeight" Value="24"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Padding" Value="4,2"/>
+	</Style>
+	<Style Selector="TextBox">
+		<Setter Property="MinHeight" Value="24"/>
+	</Style>
+
+	<!--WPF ComboBoxes stretch to their column by default; Fluent's are left aligned-->
+	<Style Selector="ComboBox">
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
+
+	<!--default window-->
+	<Style Selector="Window">
+		<Setter Property="Background" Value="{StaticResource bgColor}"/>
+		<Setter Property="Icon" Value="/Assets/ring.ico"/>
+	</Style>
+	<Style Selector="Window.DefaultWindow">
+		<Setter Property="Width" Value="700"/>
+		<Setter Property="CanResize" Value="False"/>
+		<Setter Property="SizeToContent" Value="Height"/>
+		<Setter Property="MinHeight" Value="300"/>
+		<Setter Property="MinWidth" Value="650"/>
+	</Style>
+
+	<!--rounded corner buttons, as in the WPF editor-->
+	<Style Selector="Button">
+		<Setter Property="CornerRadius" Value="2"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="BorderBrush" Value="Black"/>
+		<Setter Property="Padding" Value="5"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Foreground" Value="White"/>
+	</Style>
+	<Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="BorderBrush" Value="White"/>
+	</Style>
+	<Style Selector="Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="#FF303030"/>
+	</Style>
+	<Style Selector="Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Opacity" Value="0.25"/>
+	</Style>
+
+	<Style Selector="Button.btn">
+		<Setter Property="BorderBrush" Value="#77777d"/>
+	</Style>
+	<Style Selector="Button.btn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="BorderBrush" Value="LightGray"/>
+	</Style>
+
+	<Style Selector="Button.iconbutton">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="BorderBrush" Value="Transparent"/>
+	</Style>
+	<Style Selector="Button.iconbutton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{StaticResource bgButtonColor}"/>
+		<Setter Property="BorderBrush" Value="Transparent"/>
+	</Style>
+
+	<!--tab control: white selected tab, dark unselected tabs-->
+	<Style Selector="TabItem">
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="MinHeight" Value="28"/>
+		<Setter Property="Padding" Value="10,5"/>
+		<Setter Property="Margin" Value="0,0,2,0"/>
+		<Setter Property="CornerRadius" Value="4,4,0,0"/>
+		<Setter Property="Background" Value="#FF46464A"/>
+		<Setter Property="Foreground" Value="White"/>
+	</Style>
+	<Style Selector="TabItem:selected">
+		<Setter Property="Background" Value="White"/>
+		<Setter Property="Foreground" Value="Black"/>
+	</Style>
+	<Style Selector="TabItem:disabled">
+		<Setter Property="Opacity" Value=".25"/>
+	</Style>
+	<Style Selector="TabItem /template/ Border#PART_SelectedPipe">
+		<Setter Property="IsVisible" Value="False"/>
+	</Style>
+	<Style Selector="TabItem:selected /template/ Border#PART_LayoutRoot">
+		<Setter Property="Background" Value="White"/>
+	</Style>
+	<Style Selector="TabItem:pointerover /template/ Border#PART_LayoutRoot">
+		<Setter Property="Background" Value="#FF5E5E63"/>
+	</Style>
+	<Style Selector="TabItem:selected:pointerover /template/ Border#PART_LayoutRoot">
+		<Setter Property="Background" Value="White"/>
+	</Style>
+	<Style Selector="TabItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Foreground" Value="Black"/>
+	</Style>
+
+	<!--battle map pieces-->
+	<Style Selector="Path.box1">
+		<Setter Property="Stroke" Value="White"/>
+		<Setter Property="StrokeThickness" Value="2"/>
+		<Setter Property="Fill" Value="#FF46464A"/>
+		<Setter Property="Data" Value="M0,0 H64 V128 H0 Z"/>
+	</Style>
+	<Style Selector="Path.box2">
+		<Setter Property="Stroke" Value="White"/>
+		<Setter Property="StrokeThickness" Value="2"/>
+		<Setter Property="Fill" Value="#FF46464A"/>
+		<Setter Property="Data" Value="M0,0 H64 V64 H0 Z"/>
+	</Style>
+	<Style Selector="Path.wall">
+		<Setter Property="Stroke" Value="{StaticResource wallOutline}"/>
+		<Setter Property="StrokeThickness" Value="2"/>
+		<Setter Property="Fill" Value="{StaticResource wallNone}"/>
+		<Setter Property="Data" Value="M0,0 H48 V16 H0 Z"/>
+	</Style>
+</Styles>

@@ -1,0 +1,194 @@
+<Window x:Class="JiME.Views.MonsterEditorWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:JiME"
+        mc:Ignorable="d"
+        Title="Enemy Editor" Classes="DefaultWindow" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+
+	<Window.Styles>
+		<Style Selector="RadioButton">
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Margin" Value="0,5"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+	</Window.Styles>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+		<StackPanel Margin="5">
+			<Border Classes="callout" Margin="0,0,0,5">
+				<StackPanel>
+					<TextBlock Classes="Heading" Text="Enemy Name:"/>
+					<TextBlock Classes="SubText" TextWrapping="Wrap" Text="The Enemy Name defaults to the Enemy Type. Customize a name for a special enemy with a unique name, otherwise leave it blank to use the default."/>
+					<StackPanel Orientation="Horizontal" Margin="0,5">
+						<TextBox x:Name="nameTB" Text="{Binding monster.dataName, UpdateSourceTrigger=PropertyChanged}" Classes="DefaultTextBox" Width="350" HorizontalAlignment="Left"/>
+						<TextBlock Text="Enemy Count:" Classes="Heading" Margin="25,0,0,0"/>
+						<ComboBox Margin="10,0" SelectedIndex="{Binding monster.count}">
+							<ComboBoxItem Content="0" IsVisible="False"/>
+							<ComboBoxItem Content="1"/>
+							<ComboBoxItem Content="2"/>
+							<ComboBoxItem Content="3"/>
+						</ComboBox>
+						<StackPanel Orientation="Horizontal" Margin="10,0">
+							<TextBlock Classes="Heading" Margin="0,0,10,5" Text="Lore Reward:"/>
+							<TextBox Classes="DefaultTextBox" Width="25" HorizontalAlignment="Left" Text="{Binding monster.loreReward}"/>
+						</StackPanel>
+					</StackPanel>
+
+					<TextBlock Classes="SubText" Text="This Lore Reward is only awarded for defeating this particular Enemy Group. The Lore Reward in the Event's General Properties is still awarded for defeating all Groups in the Event." TextWrapping="Wrap"/>
+				</StackPanel>
+			</Border>
+
+
+			<Border Classes="callout" Margin="0,5">
+				<StackPanel>
+					<TextBlock Text="Enemy Type:" Classes="Heading"/>
+					<StackPanel Orientation="Horizontal">
+						<RadioButton x:Name="ruffianRB" Content="Ruffian" Click="monsterType_Click"/>
+						<RadioButton x:Name="goblinRB" Content="Goblin Scout" Margin="20,0" Click="monsterType_Click"/>
+						<RadioButton x:Name="hunterRB" Content="Orc Hunter" Click="monsterType_Click"/>
+						<RadioButton x:Name="orcRB" Content="Orc Marauder" Margin="20,0" Click="monsterType_Click"/>
+						<RadioButton x:Name="wargRB" Content="Warg" Click="monsterType_Click"/>
+						<RadioButton x:Name="wightRB" Content="Wight" Click="monsterType_Click" Margin="20,0"/>
+						<RadioButton x:Name="trollRB" Content="Hill Troll" Click="monsterType_Click"/>
+					</StackPanel>
+				</StackPanel>
+			</Border>
+
+			<Border Classes="callout" Margin="0,5">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="auto"/>
+					</Grid.ColumnDefinitions>
+					<!--use default-->
+					<StackPanel>
+						<TextBlock Text="Base Enemy Stats:" Classes="Heading"/>
+						<CheckBox x:Name="useDefaultCB" Grid.Column="0" Content="Use Default Stats" Foreground="White" VerticalAlignment="Center" Margin="0,10,0,0" IsChecked="{Binding monster.defaultStats}" Click="useDefaultCB_Click"/>
+						<TextBlock x:Name="special" Classes="SubText" TextWrapping="Wrap" MaxWidth="110" Margin="0,10,0,0"/>
+					</StackPanel>
+
+					<StackPanel x:Name="stats1" HorizontalAlignment="Center" Grid.Column="1" Orientation="Horizontal" IsEnabled="True">
+						<StackPanel Orientation="Horizontal">
+							<Image Source="/Assets/health.png" Height="32" Margin="0,0,5,0"/>
+							<TextBox Classes="DefaultTextBox" Width="25" Text="{Binding monster.health, UpdateSourceTrigger=PropertyChanged}"/>
+						</StackPanel>
+
+						<StackPanel MaxWidth="250">
+							<StackPanel Orientation="Horizontal" Margin="10,0">
+								<Image Source="/Assets/damage.png" Height="40" Margin="10,0,5,0"/>
+								<TextBlock Text="/" Classes="Heading"/>
+								<Image Source="/Assets/fear.png" Height="40" Margin="10,0,5,0"/>
+								<TextBox Classes="DefaultTextBox" Width="25" Text="{Binding monster.damage, UpdateSourceTrigger=PropertyChanged}"/>
+							</StackPanel>
+							<TextBlock Classes="SubText" Margin="10,0,10,0" Text="Damage and Fear share one value randomly split between them." TextWrapping="Wrap"/>
+						</StackPanel>
+					</StackPanel>
+
+					<StackPanel x:Name="stats2" Grid.Column="2" IsEnabled="True">
+						<TextBlock Text="Attributes:" Classes="Heading"/>
+						<StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+							<StackPanel Margin="0,5,0,0">
+								<TextBlock Text="Shield:" Classes="Heading"/>
+								<TextBox Classes="DefaultTextBox" Width="25" HorizontalAlignment="Left" Text="{Binding monster.shieldValue}"/>
+							</StackPanel>
+
+							<StackPanel Margin="15,5,0,0">
+								<TextBlock Text="Sorcery:" Classes="Heading"/>
+								<TextBox Classes="DefaultTextBox" Width="25" HorizontalAlignment="Left" Text="{Binding monster.sorceryValue}"/>
+							</StackPanel>
+
+							<StackPanel Margin="15,5,0,0">
+								<TextBlock Text="Movement:" Classes="Heading"/>
+								<StackPanel Orientation="Horizontal">
+									<TextBox Margin="0,0,10,0" Classes="DefaultTextBox" Width="25" HorizontalAlignment="Left" Text="{Binding monster.movementValue}"/>
+								</StackPanel>
+							</StackPanel>
+						</StackPanel>
+					</StackPanel>
+				</Grid>
+			</Border>
+
+			<!--stats-->
+			<Border Classes="callout" Margin="0,5">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="auto"/>
+					</Grid.ColumnDefinitions>
+					<!--<StackPanel Orientation="Horizontal">
+						<StackPanel Orientation="Horizontal">
+							<Image Source="/Assets/health.png" Height="32" Margin="0,0,5,0"/>
+							<TextBox Classes="DefaultTextBox" Width="25" Text="{Binding monster.health, UpdateSourceTrigger=PropertyChanged}"/>
+						</StackPanel>
+
+						<StackPanel Orientation="Horizontal" Margin="10,0">
+							<Image Source="/Assets/damage.png" Height="40" Margin="10,0,5,0"/>
+							<TextBox Classes="DefaultTextBox" Width="25" Text="{Binding monster.damage, UpdateSourceTrigger=PropertyChanged}"/>
+						</StackPanel>
+
+						<StackPanel Orientation="Horizontal">
+							<Image Source="/Assets/fear.png" Height="40" Margin="10,0,5,0"/>
+							<TextBox Classes="DefaultTextBox" Width="25" Text="{Binding monster.fear, UpdateSourceTrigger=PropertyChanged}"/>
+						</StackPanel>
+					</StackPanel>-->
+
+					<StackPanel>
+						<TextBlock Text="Attack Negated By:" Classes="Heading"/>
+						<UniformGrid VerticalAlignment="Center" Columns="5">
+							<RadioButton x:Name="mightRB" Content="Might"/>
+							<RadioButton x:Name="agilityRB" Content="Agility"/>
+							<RadioButton x:Name="wisdomRB" Content="Wisdom"/>
+							<RadioButton x:Name="spiritRB" Content="Spirit" Margin="10,0,0,0"/>
+							<RadioButton x:Name="witRB" Content="Wit" Margin="5,0,0,0"/>
+						</UniformGrid>
+					</StackPanel>
+
+					<StackPanel Grid.Column="1" VerticalAlignment="Center">
+						<TextBlock Classes="Heading" Text="Elite Bonuses:"/>
+						<TextBlock Text="Checking any of these makes the enemy Elite." Classes="SubText" Margin="0,0,0,5"/>
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Content="Large" Foreground="White" IsChecked="{Binding monster.isLarge}" VerticalAlignment="Center"/>
+							<CheckBox Content="Bloodthirsty" Margin="15,0" Foreground="White" IsChecked="{Binding monster.isBloodThirsty}" VerticalAlignment="Center"/>
+							<CheckBox Content="Armored" Margin="5,0" Foreground="White" IsChecked="{Binding monster.isArmored}" VerticalAlignment="Center"/>
+						</StackPanel>
+					</StackPanel>
+				</Grid>
+			</Border>
+
+			<!--difficulty-->
+			<Border Classes="callout" Margin="0,5,0,0">
+				<StackPanel>
+					<TextBlock Text="Custom Difficulty Setting:" Classes="Heading"/>
+					<StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+						<TextBlock Text="This Group appears in the following Difficulties:" Classes="SubText"/>
+						<CheckBox Content="Easy" Foreground="Green" Margin="10,0,0,0" IsChecked="{Binding monster.isEasy}" FontWeight="Bold"/>
+						<CheckBox Content="Normal" Foreground="Yellow" Margin="10,0,0,0" IsChecked="{Binding monster.isNormal}" FontWeight="Bold"/>
+						<CheckBox Content="Hard" Foreground="Red" Margin="10,0,0,0" IsChecked="{Binding monster.isHard}" FontWeight="Bold"/>
+					</StackPanel>
+					<TextBlock Classes="SubText" TextWrapping="Wrap" Text="This setting allows the design of flexible encounters with the creation of Groups that only appear in specific Difficulty modes. No matter which Difficulties you select, always design the Group for Normal Difficulty with 2 Players. The Companion App will modify the Group automatically." Margin="0,5,0,0"/>
+				</StackPanel>
+			</Border>
+		</StackPanel>
+
+		<!--footer-->
+		<Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="Silver" HorizontalAlignment="Stretch" Background="#FF46464A">
+			<WrapPanel HorizontalAlignment="Right" >
+
+				<Button x:Name="okButton" Margin="10" Background="MediumSeaGreen" Click="OkButton_Click" IsDefault="True">
+					<Image Source="/Assets/ok.png" Stretch="Uniform" Width="32" Margin="5"/>
+				</Button>
+
+				<Button x:Name="cancelButton" Margin="0,10,10,10" Background="{StaticResource bgCancelDelete}" Click="CancelButton_Click" IsCancel="True">
+					<Image Source="/Assets/cancel.png" Stretch="Uniform" Width="32" Margin="5"/>
+				</Button>
+			</WrapPanel>
+		</Border>
+	</Grid>
+</Window>

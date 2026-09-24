@@ -1,0 +1,203 @@
+<Window x:Class="JiME.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:JiME"
+        mc:Ignorable="d"
+        xmlns:uc="using:JiME.UserControls"
+        Title="{Binding titleChangedToken, Converter={StaticResource titleConverter}}" Height="560" Width="1000" MinHeight="500" MinWidth="700" WindowStartupLocation="CenterScreen" Background="#FF2D2D30" Closing="Window_Closing" CanResize="True">
+
+	<Window.Resources>
+		<!--"New Event" popup menu-->
+		<ContextMenu x:Key="cmButton">
+			<MenuItem Header="New Text Dialog" Click="NewTextInteraction_Click"/>
+			<MenuItem Header="New Story Branch" Click="NewBranchInteraction_Click"/>
+			<MenuItem Header="New Enemy Event" Click="NewThreatInteraction_Click"/>
+			<MenuItem Header="New Stat Test" Click="NewTestInteraction_Click"/>
+			<MenuItem Header="New Decision Interaction" Click="NewDecisionInteraction_Click"/>
+			<MenuItem Header="New Multi-Event" Click="NewMultiInteraction_Click"/>
+			<MenuItem Header="New Persistent Event" Click="NewPersistentInteraction_Click"/>
+			<MenuItem Header="New Conditional Event" Click="NewConditionalInteraction_Click"/>
+			<MenuItem Header="New Dialog Event" Click="NewDialogInteraction_Click"/>
+			<MenuItem Header="New Replace Token Event" Click="NewReplaceTokenInteraction_Click"/>
+			<MenuItem Header="New Reward Event" Click="NewRewardInteraction_Click"/>
+		</ContextMenu>
+
+		<local:BoolInvertConverter x:Key="b2vis"/>
+	</Window.Resources>
+
+	<Window.Styles>
+		<Style Selector="TextBlock">
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+		<Style Selector="TextBlock.SubText">
+			<Setter Property="Foreground" Value="Silver"/>
+		</Style>
+		<Style Selector="Border.toolbar Separator">
+			<Setter Property="Width" Value="1"/>
+			<Setter Property="Height" Value="28"/>
+			<Setter Property="Background" Value="Silver"/>
+		</Style>
+	</Window.Styles>
+
+	<DockPanel LastChildFill="True" >
+		<Border DockPanel.Dock="Top" Background="#FF46464A" Padding="5" Classes="toolbar">
+		<WrapPanel Orientation="Horizontal">
+
+			<Button x:Name="newProjectButton" Padding="5" Margin="0,0,5,0" Click="NewProject_Click" ToolTip.Tip="New Project" Classes="iconbutton">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="/Assets/newcampaign.png" Height="24"/>
+				</StackPanel>
+			</Button>
+
+			<Button x:Name="openButton" Padding="5" Margin="0,0,5,0" Click="OpenProject_Click" ToolTip.Tip="Open Project" Classes="iconbutton">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="/Assets/open.png" Height="24"/>
+				</StackPanel>
+			</Button>
+
+			<Button x:Name="saveButton" Padding="5" Margin="0,0,5,0" Click="SaveProject_Click" ToolTip.Tip="Save Project" Classes="iconbutton">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="/Assets/save.png" Height="24"/>
+				</StackPanel>
+			</Button>
+
+			<Separator Opacity=".25" Margin="5,0"/>
+
+			<TextBlock x:Name="scenarioName" VerticalAlignment="Center" FontSize="15" FontWeight="Bold" Margin="5,0" PointerPressed="scenarioName_PointerPressed" Text="{Binding scenarioName}" Cursor="Hand" ToolTip.Tip="Click to rename the Scenario">
+			</TextBlock>
+
+			<TextBox x:Name="scenarioNameEdit" FontSize="15" MinWidth="200" KeyDown="ScenarioNameEdit_KeyDown" LostFocus="scenarioNameEdit_LostFocus" IsVisible="False" Text="edit me"/>
+
+			<Button x:Name="scenarioSettingsButton" ToolTip.Tip="Edit Scenario" Background="{StaticResource bgButtonColor}" Classes="btn"  Click="ScenarioSettingsButton_Click" >
+				<Image Source="/Assets/settings.png" Height="24" Width="24" Stretch="UniformToFill"/>
+			</Button>
+
+			<Separator Margin="10,0,5,0" Opacity=".25"/>
+
+			<Button x:Name="newOChapterButton" Padding="5" Margin="5,0" Click="NewChapter_Click" Background="{StaticResource bgButtonColor}" Classes="btn">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="/Assets/addtileblock.png" Height="24"/>
+					<TextBlock Text="New Tile Block" VerticalAlignment="Center" Margin="5,0"/>
+				</StackPanel>
+			</Button>
+
+			<Button x:Name="newObjectiveButton" Padding="5" Margin="5,0" Click="NewObjective_Click" Background="{StaticResource bgButtonColor}" Classes="btn">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="/Assets/addobjective.png" Height="24"/>
+					<TextBlock Text="New Objective" VerticalAlignment="Center" Margin="5,0"/>
+				</StackPanel>
+			</Button>
+
+			<Button x:Name="newEventButton" Padding="5" Margin="5,0"  Background="{StaticResource bgButtonColor}" Classes="btn" Click="NewEvent_Click">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="/Assets/addevent.png" Height="24"/>
+					<TextBlock Text="New Event" VerticalAlignment="Center" Margin="5,0"/>
+				</StackPanel>
+			</Button>
+
+			<Button x:Name="newTriggerButton" Padding="5" Margin="5,0" Click="NewTrigger_Click" Background="{StaticResource bgButtonColor}" Classes="btn">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="/Assets/addtrigger.png" Height="24"/>
+					<TextBlock Text="New Trigger" VerticalAlignment="Center" Margin="5,0"/>
+				</StackPanel>
+			</Button>
+		</WrapPanel>
+		</Border>
+
+		<Border BorderBrush="Black" BorderThickness="0,0,1,0" Background="#FF46464A">
+			<Grid Width="170" >
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+
+				<Border BorderThickness="0,0,0,0" BorderBrush="Gray" Grid.Row="0">
+					<uc:SidebarListView x:Name="objectivesUC" Margin="5" Title="Objectives" />
+				</Border>
+
+				<Border Grid.Row="2" BorderThickness="0,0,0,0" BorderBrush="Gray">
+					<uc:SidebarListView Margin="5" x:Name="interactionsUC" Title="Events" />
+				</Border>
+
+				<!--<GridSplitter HorizontalAlignment="Stretch" 
+                  Grid.Row="1" ResizeBehavior="PreviousAndNext" Height="10">
+					<GridSplitter.Background>
+						<ImageBrush Stretch="None" ImageSource="/Assets/splitter-vertical.png"/>
+					</GridSplitter.Background>
+				</GridSplitter>-->
+
+				<Border BorderThickness="0,0,0,0" BorderBrush="Gray" Grid.Row="4">
+					<uc:SidebarListView x:Name="triggersUC" Margin="5" Title="Triggers" />
+				</Border>
+
+			</Grid>
+		</Border>
+
+		<Border DockPanel.Dock="Bottom" BorderBrush="Black" BorderThickness="0,1,0,0" Height="30" Background="{StaticResource bgColorLight}">
+			<UniformGrid Columns="2">
+				<!--format version-->
+				<StackPanel Margin="5" HorizontalAlignment="Center" Orientation="Horizontal">
+					<TextBlock Text="App Version:  "/>
+					<TextBlock x:Name="appVersion"/>
+				</StackPanel>
+				<!--app version-->
+				<StackPanel Margin="5" HorizontalAlignment="Center" Orientation="Horizontal">
+					<TextBlock Text="Scenario Format Version:  "/>
+					<TextBlock x:Name="formatVersion"/>
+				</StackPanel>
+
+			</UniformGrid>
+		</Border>
+
+		<Grid>
+			<Image Source="/Assets/ring.png" Stretch="Uniform" Opacity="0.1" IsHitTestVisible="False"/>
+
+			<ScrollViewer VerticalScrollBarVisibility="Auto">
+				<!--ItemsSource="{Binding chapterObserver}"-->
+				<ItemsControl Padding="5" ItemsSource="{Binding chapterObserver}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border Classes="callout" Margin="0,0,5,5">
+								<StackPanel>
+									<TextBlock Text="{Binding dataName}" Classes="Heading" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center"/>
+									<!--<TextBlock Text="230, 330" Classes="SubText" HorizontalAlignment="Center" TextWrapping="Wrap"/>-->
+									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+										<Button x:Name="tileEditButton" Background="DodgerBlue" Margin="2,5" Click="TileEditButton_Click">
+											<TextBlock Foreground="White" Text="Tile Editor..."/>
+										</Button>
+
+										<Button x:Name="chapterPropsButton" Background="DodgerBlue" Margin="2,5" Click="ChapterPropsButton_Click">
+											<TextBlock Foreground="White" Text="Properties..."/>
+										</Button>
+									</StackPanel>
+
+									<Button x:Name="removeChapterButton" Background="{StaticResource bgCancelDelete}" HorizontalAlignment="Stretch" IsEnabled="{Binding isEmpty, Converter={StaticResource b2vis}}" Click="RemoveChapterButton_Click">
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Foreground="White" Text="Remove Block" VerticalAlignment="Center"/>
+											<Image Source="/Assets/cancel.png" Width="24" Margin="10,0,0,0"/>
+										</StackPanel>
+									</Button>
+
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+
+				</ItemsControl>
+			</ScrollViewer>
+		</Grid>
+
+	</DockPanel>
+</Window>

@@ -1,0 +1,125 @@
+<Window x:Class="JiME.Views.GalleryWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:JiME"
+        mc:Ignorable="d"
+        Title="Tile Gallery" Width="875" Classes="DefaultWindow" WindowStartupLocation="CenterScreen">
+
+	<Window.Resources>
+		<local:BoolToColor x:Key="b2c"/>
+		<local:BoolInvertConverter x:Key="b2i"/>
+	</Window.Resources>
+
+	<StackPanel>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="auto"/>
+			</Grid.RowDefinitions>
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="auto"/>
+			</Grid.ColumnDefinitions>
+
+			<Grid>
+				<ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5">
+					<!--<WrapPanel>
+						<Button Background="{StaticResource bgColorLight}" Width="200" Height="200">
+							<Image Source="/Assets/TilesA/100.png" Stretch="Uniform"/>
+						</Button>
+					</WrapPanel>-->
+
+					<ItemsControl x:Name="items" Padding="5" ItemsSource="{Binding tileObserver}">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<WrapPanel />
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+
+						<!--Binding selected, Converter={StaticResource b2c}-->
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<StackPanel>
+									<Button x:Name="tileButton" Background="{Binding selected, Converter={StaticResource b2c}}" Width="300" Height="300" DataContext="{Binding}" Click="tileButton_Click" IsEnabled="{Binding enabled}" ToolTip.ShowDelay="1000">
+										<Image Source="{Binding source}" Stretch="Uniform"/>
+										<ToolTip.Tip>
+											<Image Source="{Binding source}" Width="512" Stretch="Uniform" MaxHeight="512"/>
+										</ToolTip.Tip>
+									</Button>
+									<StackPanel Orientation="Horizontal" Margin="0,5,0,10" HorizontalAlignment="Center">
+										<TextBlock Text="{Binding id}" Classes="Heading"/>
+										<TextBlock Text="{Binding side}" Classes="Heading"/>
+									</StackPanel>
+								</StackPanel>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+			</Grid>
+
+			<!--sidebar-->
+			<Border Grid.Column="1" Width="200" Classes="callout" Margin="10,0,0,0">
+				<StackPanel>
+					<Border Classes="callout" Background="{StaticResource bgColor}" >
+						<StackPanel>
+							<TextBlock Classes="Heading" Text="Selected Tiles" HorizontalAlignment="Center"/>
+							<TextBlock Classes="SubText" Text="{Binding selectedTiles}" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="14"/>
+							<TextBlock Text="{Binding max}" Classes="SubText" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+						</StackPanel>
+					</Border>
+
+					<!--buttons-->
+					<TextBlock Text="Toggle A/B Sides" Classes="Heading" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<RadioButton x:Name="sideA" Content="Side A" GroupName="side" Foreground="White" Margin="10" IsChecked="True" Click="sideA_Click"/>
+						<RadioButton x:Name="sideB" Content="Side B" GroupName="side" Foreground="White" Margin="10" IsChecked="False" Click="sideB_Click"/>
+					</StackPanel>
+
+					<TextBlock Text="You can add a mix of A and B sided Tiles by using the A/B radio buttons above. As you select Tiles, they will 'lock in' their side as you toggle the rest of the Gallery back and forth." Classes="SubText" TextWrapping="Wrap"/>
+
+					<TextBlock Margin="0,10,0,0" Classes="SubText" TextWrapping="Wrap" Text="Hover over a tile to show a zoomed in popup. Hold the right mouse button down to disable the zoom feature."/>
+
+					<Button x:Name="addTilesButton" Click="addTilesButton_Click" Background="DodgerBlue" Foreground="White" Margin="0,10,0,0" IsDefault="True" Height="36">
+						<StackPanel Orientation="Horizontal" Margin="5,0">
+							<TextBlock Text="Add Selected Tiles" Classes="Heading" VerticalAlignment="Center" Margin="0,0,5,0"/>
+							<Image Source="/Assets/add.png" Height="24"/>
+						</StackPanel>
+					</Button>
+				</StackPanel>
+			</Border>
+		</Grid>
+
+		<!--footer-->
+		<Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="Silver" HorizontalAlignment="Stretch" Background="#FF46464A">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<StackPanel Orientation="Horizontal" Grid.Column="0">
+					<Button x:Name="left" Margin="10" Background="DodgerBlue" Click="left_Click">
+						<Image Source="/Assets/left.png" Stretch="Uniform" Width="32" Margin="5"/>
+					</Button>
+					<Button x:Name="right" Margin="10" Background="DodgerBlue" Click="right_Click">
+						<Image Source="/Assets/right.png" Stretch="Uniform" Width="32" Margin="5"/>
+					</Button>
+				</StackPanel>
+				<TextBlock Text="Page: " Grid.Column="1" VerticalAlignment="Center" Classes="Heading"/>
+				<TextBlock Text="{Binding page}" Grid.Column="2" VerticalAlignment="Center" Classes="Heading"/>
+
+				<WrapPanel Grid.Column="3" HorizontalAlignment="Right">
+					<Button x:Name="okButton" Margin="10" Background="{StaticResource bgCancelDelete}" Click="okButton_Click" IsCancel="True">
+						<Image Source="/Assets/cancel.png" Stretch="Uniform" Width="32" Margin="5"/>
+					</Button>
+				</WrapPanel>
+			</Grid>
+		</Border>
+	</StackPanel>
+</Window>

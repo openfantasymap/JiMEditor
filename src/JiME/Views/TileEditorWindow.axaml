@@ -1,0 +1,167 @@
+<Window x:Class="JiME.Views.TileEditorWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+				xmlns:local="using:JiME"
+				xmlns:core="using:System"
+        Title="Tile Editor" Classes="DefaultWindow" WindowStartupLocation="CenterScreen" MinWidth="800"  MinHeight="400" Height="650" SizeToContent="Manual" Closing="Window_Closing">
+
+	<Window.Resources>
+		<local:NullToVisibility x:Key="n2vis"/>
+	</Window.Resources>
+
+	<Window.Styles>
+		<!--hex grid background-->
+		<Style Selector="Canvas#canvas">
+			<Setter Property="Background">
+				<DrawingBrush TileMode="Tile" DestinationRect="4.2871872,0,32,28" Opacity=".25">
+					<DrawingBrush.Drawing>
+						<GeometryDrawing>
+							<GeometryDrawing.Geometry>
+								<RectangleGeometry Rect="4.2871872,0,32,28"/>
+							</GeometryDrawing.Geometry>
+							<GeometryDrawing.Pen>
+								<Pen Brush="Gray" Thickness="1"/>
+							</GeometryDrawing.Pen>
+						</GeometryDrawing>
+					</DrawingBrush.Drawing>
+				</DrawingBrush>
+			</Setter>
+		</Style>
+	</Window.Styles>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+
+		<Grid Margin="10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="auto"/>
+			</Grid.ColumnDefinitions>
+
+			<Canvas x:Name="canvas" PointerReleased="Canvas_PointerReleased" PointerMoved="Canvas_PointerMoved" Width="512" Height="512" HorizontalAlignment="Left" VerticalAlignment="Top" PointerPressed="canvas_PointerPressed">
+				<!--<Image Source="/Assets/TilesA/101.png" />-->
+				<!--<Path Style="{StaticResource hex}"/>
+				<Path Style="{StaticResource hex}">
+					<Path.RenderTransform>
+						<TranslateTransform X="27.712812" Y="48"/>
+					</Path.RenderTransform>
+				</Path>-->
+				<!--<Path Style="{StaticResource hex}">
+					<Path.RenderTransform>
+						<TranslateTransform X="55.4256256" Y="96"/>
+					</Path.RenderTransform>
+				</Path>-->
+				<!--<Path Style="{StaticResource hex}">
+					<Path.RenderTransform>
+						<TranslateTransform X="55.4256256" Y="0"/>
+					</Path.RenderTransform>
+				</Path>-->
+				<!--<Path Style="{StaticResource path}"/>-->
+			</Canvas>
+
+			<ScrollViewer  Grid.Column="1" VerticalScrollBarVisibility="Auto">
+				<Border Grid.Column="1" Width="230" Classes="callout" Margin="10,0,0,0">
+					<StackPanel>
+						<Border Classes="callout" Background="{StaticResource bgColor}" >
+							<StackPanel>
+								<TextBlock Text="Select A Tile To Add:" Classes="Heading"/>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="auto"/>
+									</Grid.ColumnDefinitions>
+									<ComboBox Name="tilePool" ItemsSource="{Binding scenario.globalTilePool}" VerticalAlignment="Center" SelectedIndex="0"/>
+									<Button Grid.Column="1" x:Name="addTileButton" Click="AddTileButton_Click" Background="MediumSeaGreen" Height="32" Width=" 32" Margin="5,0,0,0">
+										<Image Source="/Assets/add2.png"/>
+									</Button>
+								</Grid>
+
+								<Button x:Name="tileGalleryButton" Background="DodgerBlue" Margin="0,10,0,0" Content="Add From Tile Gallery..." Foreground="White" Click="tileGalleryButton_Click" Height="36" FontSize="14" FontWeight="Bold">
+								</Button>
+
+								<CheckBox x:Name="toggleUseGraphics" Content="Use Tile Graphics" IsChecked="{Binding scenario.useTileGraphics}" Foreground="White" Margin="0,10,0,0" Click="toggleUseGraphics_Click"/>
+							</StackPanel>
+						</Border>
+
+
+						<TextBlock Text="Tiles In Block" Classes="Heading" HorizontalAlignment="Center" Margin="0,10,0,5"/>
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="auto"/>
+							</Grid.ColumnDefinitions>
+							<ComboBox Name="inChapterCB" ItemsSource="{Binding chapter.tileObserver}" DisplayMemberBinding="{Binding idNumber}" SelectionChanged="ComboBox_SelectionChanged" Focusable="False" VerticalAlignment="Center"/>
+							<Button Grid.Column="1" x:Name="removeTileButton" Click="removeTileButton_Click" Background="{StaticResource bgCancelDelete}" Height="32" Width=" 32" Margin="5,0,0,0">
+								<Image Source="/Assets/remove.png"/>
+							</Button>
+						</Grid>
+						<!--SelectedValue="{Binding selected}"-->
+						<Border Classes="callout" Background="{StaticResource bgColor}" Margin="0,10" IsVisible="{Binding selected, Converter={StaticResource n2vis}}">
+							<StackPanel>
+								<TextBlock Text="Selected Tile" Classes="Heading" HorizontalAlignment="Center"/>
+								<TextBlock Text="{Binding selected.idNumber}" Classes="SubText" HorizontalAlignment="Center"/>
+								<UniformGrid Columns="2">
+
+									<RadioButton x:Name="radioA" Content="Side A" Foreground="White" HorizontalAlignment="Center" Click="radioA_Click" GroupName="tileside"/>
+									<!--IsChecked="{Binding selected.tileSide, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource side}, ConverterParameter=1}"-->
+
+									<RadioButton x:Name="radioB" Content="Side B" Foreground="White" HorizontalAlignment="Center" Click="radioB_Click" GroupName="tileside"/>
+									<!--IsChecked="{Binding selected.tileSide, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource side}, ConverterParameter=2}"-->
+								</UniformGrid>
+
+								<TextBlock x:Name="tokenCount" Text="Tokens in Tile: 0" Classes="Heading" HorizontalAlignment="Center" Margin="0,10"/>
+
+								<TextBlock Text="Fire This Trigger When Explored (Optional):" Classes="Heading" Margin="0,5,0,0" TextWrapping="Wrap"/>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="auto"/>
+									</Grid.ColumnDefinitions>
+
+									<ComboBox VerticalAlignment="Center" ItemsSource="{Binding scenario.triggersObserver}" DisplayMemberBinding="{Binding dataName}" SelectedValue="{Binding selected.triggerName}" SelectedValueBinding="{Binding dataName}"/>
+									<Button Grid.Column="1" x:Name="addExploredTriggerButton" Background="MediumSeaGreen" Margin="5,0,0,0" Height="32" Width="32" Click="addExploredTriggerButton_Click">
+										<Image Source="/Assets/add2.png"/>
+									</Button>
+								</Grid>
+
+								<CheckBox IsChecked="{Binding selected.isStartTile}" Margin="0,10,0,0" Content="Is Starting Tile" Foreground="White"/>
+
+								<Button x:Name="editTokenButton" Margin="0,10,0,0" Background="DodgerBlue" Foreground="White" Content="Token Editor..." Click="editTokenButton_Click" Height="36" FontSize="14" FontWeight="Bold">
+								</Button>
+								<TextBlock Text="Editing Tokens is disabled because this Tile Block uses a Random Token Interaction Group." Classes="SubText" TextWrapping="Wrap" Margin="0,5,0,0" Name="disabledMessage"/>
+							</StackPanel>
+						</Border>
+					</StackPanel>
+				</Border>
+			</ScrollViewer>
+		</Grid>
+
+		<StackPanel Grid.Row="1">
+			<!--footer-->
+			<Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="Silver" HorizontalAlignment="Stretch" Background="#FF46464A">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="auto"/>
+					</Grid.ColumnDefinitions>
+
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
+						<TextBlock Classes="Heading" Text="Add Up To 5 Tiles" Margin="0,0,0,0"/>
+						<TextBlock Classes="Heading" Text="Rotate: Page Up/Page Down" Margin="80,0"/>
+						<TextBlock Classes="Heading" Text="Remove Selected Tile: Del" />
+					</StackPanel>
+
+					<Button Grid.Column="1" x:Name="okButton" Margin="10" Background="MediumSeaGreen" Click="OkButton_Click" IsDefault="True">
+						<Image Source="/Assets/ok.png" Stretch="Uniform" Width="32" Margin="5"/>
+					</Button>
+				</Grid>
+			</Border>
+		</StackPanel>
+	</Grid>
+</Window>

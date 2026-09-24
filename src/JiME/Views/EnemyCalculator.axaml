@@ -1,0 +1,154 @@
+<Window x:Class="JiME.Views.EnemyCalculator"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:JiME"
+        mc:Ignorable="d"
+        Title="Enemy Simulator" Classes="DefaultWindow" WindowStartupLocation="CenterScreen" Width="750">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Margin="5">
+			<Border Classes="callout">
+				<StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock x:Name="basePoints" Text="Base Pool Points: 10" Classes="Heading"/>
+						<TextBlock x:Name="bias" Text="Difficulty Bias: Medium" Classes="Heading" Margin="50,0,0,0"/>
+					</StackPanel>
+
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Scaled Pool Points:" Classes="Heading"/>
+						<TextBlock Text="{Binding scaledPoints}" Classes="Heading" Margin="5,0"/>
+
+						<TextBlock Text="Points For Modifiers:" Classes="Heading" Margin="50,0,0,0"/>
+						<TextBlock Text="{Binding modPoints}" Classes="Heading" Margin="5,0"/>
+
+						<TextBlock Text="Points Left Over:" Classes="Heading" Margin="50,0,0,0"/>
+						<TextBlock Text="{Binding leftOvers}" Classes="Heading" Margin="5,0"/>
+					</StackPanel>
+					<TextBlock Text="Simulated encounters are generated using the same algorithm as the Companion App. Hero Count, Difficulty mode and Difficulty Bias affect the scaling of Enemy Events." TextWrapping="Wrap" Classes="SubText" Margin="0,0,0,10"/>
+
+					<UniformGrid Columns="3">
+						<Button Content="Re-Roll This Encounter" Name="rerollBtn" Click="rerollBtn_Click" Background="DodgerBlue" Foreground="White" HorizontalAlignment="Left" Height="36" FontWeight="Bold" FontSize="14"/>
+
+						<ComboBox Name="playerCB" Margin="0,0,10,0" VerticalAlignment="Center" SelectedIndex="{Binding selectedPlayers}" SelectionChanged="playerCB_SelectionChanged">
+							<ComboBoxItem Content="1 Player"/>
+							<ComboBoxItem Content="2 Players"/>
+							<ComboBoxItem Content="3 Players"/>
+							<ComboBoxItem Content="4 Players"/>
+							<ComboBoxItem Content="5 Players"/>
+						</ComboBox>
+
+						<ComboBox Name="diffCB" Margin="10,0,0,0" VerticalAlignment="Center" SelectedIndex="{Binding selectedDifficulty}" SelectionChanged="diffCB_SelectionChanged">
+							<ComboBoxItem Content="Easy"/>
+							<ComboBoxItem Content="Normal"/>
+							<ComboBoxItem Content="Hard"/>
+						</ComboBox>
+					</UniformGrid>
+				</StackPanel>
+			</Border>
+
+			<!--<Border Classes="callout" Width="160" Margin="0,0,5,5" IsVisible="False">
+				<StackPanel>
+					<TextBlock Text="Binding dataName}" Classes="Heading"/>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Enemy Count:" Classes="Heading"/>
+						<TextBlock Text="{Binding count}" Classes="Heading" Margin="5,0,0,0"/>
+					</StackPanel>
+
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Health:" Classes="Heading"/>
+						<TextBlock Text="{Binding health}" Classes="Heading" Margin="5,0,0,0"/>
+					</StackPanel>
+
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Damage:" Classes="Heading"/>
+						<TextBlock Text="{Binding damage}" Classes="Heading" Margin="5,0,0,0"/>
+					</StackPanel>
+
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Armor:" Classes="Heading"/>
+						<TextBlock Text="{Binding shieldValue}" Classes="Heading" Margin="5,0,0,0"/>
+					</StackPanel>
+
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Sorcery:" Classes="Heading"/>
+						<TextBlock Text="{Binding sorceryValue}" Classes="Heading" Margin="5,0,0,0"/>
+					</StackPanel>
+
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Elite Modifiers:" Classes="Heading"/>
+						<TextBlock Text="{Binding specialAbility}" Classes="Heading" Margin="5,0,0,0"/>
+					</StackPanel>
+				</StackPanel>
+			</Border>-->
+		</StackPanel>
+
+		<!--data-->
+		<ItemsControl Grid.Row="1" Padding="5" ItemsSource="{Binding calculatedItems}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<WrapPanel />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Border Classes="callout" Margin="0,0,5,5">
+						<StackPanel>
+							<TextBlock Text="{Binding dataName}" Classes="Heading"/>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="Enemy Count:" Classes="Heading"/>
+								<TextBlock Text="{Binding count}" Classes="Heading" Margin="5,0,0,0"/>
+							</StackPanel>
+
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="Group Cost:" Classes="Heading"/>
+								<TextBlock Text="{Binding cost}" Classes="Heading" Margin="5,0,0,0"/>
+							</StackPanel>
+
+							<!--<StackPanel Orientation="Horizontal">
+								<TextBlock Text="Health:" Classes="Heading"/>
+								<TextBlock Text="{Binding health}" Classes="Heading" Margin="5,0,0,0"/>
+							</StackPanel>
+
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="Damage:" Classes="Heading"/>
+								<TextBlock Text="{Binding damage}" Classes="Heading" Margin="5,0,0,0"/>
+							</StackPanel>
+
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="Armor:" Classes="Heading"/>
+								<TextBlock Text="{Binding shieldValue}" Classes="Heading" Margin="5,0,0,0"/>
+							</StackPanel>
+
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="Sorcery:" Classes="Heading"/>
+								<TextBlock Text="{Binding sorceryValue}" Classes="Heading" Margin="5,0,0,0"/>
+							</StackPanel>-->
+
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="Elite Modifiers:" Classes="Heading"/>
+								<TextBlock Text="{Binding specialAbility}" Classes="Heading" Margin="5,0,0,0"/>
+							</StackPanel>
+						</StackPanel>
+					</Border>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+
+		<!--footer-->
+		<Border Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="Silver" HorizontalAlignment="Stretch" Background="#FF46464A">
+			<WrapPanel HorizontalAlignment="Right" >
+				<Button x:Name="okButton" Margin="10" Background="MediumSeaGreen" Click="okButton_Click" IsDefault="True">
+					<Image Source="/Assets/ok.png" Stretch="Uniform" Width="32" Margin="5"/>
+				</Button>
+			</WrapPanel>
+		</Border>
+	</Grid>
+</Window>
